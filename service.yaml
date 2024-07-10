@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-headless
+  # Add labels and annotations as per your requirements
+spec:
+  clusterIP: None
+  ports:
+    - name: amqp
+      port: 5672
+      protocol: TCP
+      targetPort: 5672
+    - name: http
+      port: 15672
+      protocol: TCP
+      targetPort: 15672
+    - name: prometheus
+      port: 15692
+      protocol: TCP
+      targetPort: 15692
+    selector:
+    # Specify the labels to match the RabbitMQ pods
