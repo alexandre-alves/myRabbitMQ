@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: rabbitmq
-          image: <your-docker-image>  # Replace with your custom Docker image
+          image: ssatangoss/myrabbitmq:v1  # Replace with your custom Docker image
           ports:
             - name: amqp
               containerPort: 5672
