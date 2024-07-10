@@ -82,5 +82,5 @@ spec:
       port: 15692
       protocol: TCP
       targetPort: 15692
-    selector:
+  #  selector:
     # Specify the labels to match the RabbitMQ pods
