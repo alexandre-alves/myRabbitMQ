@@ -1,0 +1,45 @@
+name: CI-CD
+on:
+  push:
+    branches: ["main"]
+    paths-ignore: 
+      - /statefulset.yaml
+  workflow_dispatch:
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código fonte
+        uses: actions/checkout@v4.1.7
+
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3.2.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Construção da imgem Docker e envio para o Docker Hub
+        uses: docker/build-push-action@v6.2.0
+        with:
+          context: ./src
+          push: true
+          file: ./Dockerfile
+          tags: | 
+            ssatangoss/myrabbitmq:v${{ github.run_number }}
+            ssatangoss/myrabbitmq:latest
+  CD:
+    runs-on: ubuntu-latest
+    needs: [CI]
+    
+    steps:
+    - name: Obtendo o código
+      uses: actions/checkout@v3
+    - name: GitOps - Patch and push
+      run: |
+        git config --global user.name "Alexandre"
+        git config --global user.email "alexandre.alvesm@gmail.com"
+        sed -i 's/image: ssatangoss\/myrabbitmq:v[0-9]\{1,3\}/image: ssatangoss\/myrabbitmq:v${{github.run_number}}/' ./statefulset.yaml
+        git add ./statefulset.yaml
+        git commit -m "Alteração para a imagem ssatangoss/myrabbitmq:v${{ github.run_number }}"
+        git push origin
