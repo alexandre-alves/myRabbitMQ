@@ -3,7 +3,7 @@ on:
   push:
     branches: ["main"]
     paths-ignore: 
-      - /statefulset.yaml
+      - k8s/*
   workflow_dispatch:
 
 jobs:
@@ -40,6 +40,6 @@ jobs:
         git config --global user.name "Alexandre"
         git config --global user.email "alexandre.alvesm@gmail.com"
         sed -i 's/image: ssatangoss\/myrabbitmq:v[0-9]\{1,3\}/image: ssatangoss\/myrabbitmq:v${{github.run_number}}/' ./statefulset.yaml
-        git add ./statefulset.yaml
+        git add ./k8s
         git commit -m "Alteração para a imagem ssatangoss/myrabbitmq:v${{ github.run_number }}"
         git push origin
