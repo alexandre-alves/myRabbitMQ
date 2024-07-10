@@ -22,7 +22,7 @@ jobs:
       - name: Construção da imgem Docker e envio para o Docker Hub
         uses: docker/build-push-action@v6.2.0
         with:
-          context: ./src
+          context: ./
           push: true
           file: ./Dockerfile
           tags: | 
